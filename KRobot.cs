@@ -15,7 +15,10 @@ namespace XO
             if (str == "X")
                 MakeXMove(field, counter);
             else
-                MakeOMove(field, counter);
+            {
+                if (!TryCompleteLine(field, "O") && !TryCompleteLine(field, "X")) // Если нет возможности выиграть, попытаемся блокировать ход игрока
+                    MakeXMove(field, counter);
+            }
 
             Console.WriteLine("The robot made a move: ");
             XOFunctions.PrintXO(field);
@@ -78,22 +81,6 @@ namespace XO
                 MakeRandomXMove(field);
         }
 
-        private static void MakeOMove(string[] field, int counter)
-        {
-            if (counter == 1)
-            {
-                if (field[4] == "-")
-                    field[4] = "O";
-                else
-                    MakeRandomOMove(field);
-            }
-            else
-            {
-                if (!TryCompleteLine(field, "O") && !TryCompleteLine(field, "X"))
-                    MakeRandomOMove(field);
-            }
-        }
-
         private static bool TryCompleteLine(string[] field, string marker)
         {
             int[,] winningCombinations = new int[,]
@@ -129,22 +116,14 @@ namespace XO
             return false;
         }
 
-        private static void MakeRandomOMove(string[] field)
-        {
-            int index = random.Next(0, 9);
-            while (field[index] != "-")
-            {
-                index = random.Next(0, 9);
-            }
-            field[index] = "O";
-        }
-
         private static void MakeRandomXMove(string[] field)
         {
             int index = random.Next(0, 9);
             while (field[index] != "-")
             {
                 index = random.Next(0, 9);
+                if (field.All(cell => cell != "-")) // Если все клетки заняты, выйдем из цикла
+                    break;
             }
             field[index] = "X";
         }

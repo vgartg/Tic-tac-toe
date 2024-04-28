@@ -8,7 +8,6 @@ namespace XO
 {
     public class XOFunctions
     {
-        //Центральная функция игры, которая определяет поле, один или два игрока играют, уровень сложности и т.д.
         public static void FunXO()
         {
             Random r = new Random();
@@ -62,7 +61,7 @@ namespace XO
 
                     if (chooseBool == 0)
                     {
-                        if (chooseLVLBool == 1) KRobot.MakeRobotKiller(field, "X", counter); //TEST
+                        if (chooseLVLBool == 1) KRobot.MakeRobotKiller(field, "X", counter);
                         else MakeRobot(field, "X");
                         if (counter >= 3) if (VictoryCheck(field) != "") { Console.WriteLine("Oops.. You lost"); return; }
                         MakePeople(field, "O");
@@ -73,7 +72,7 @@ namespace XO
                     {
                         MakePeople(field, "X");
                         if (counter >= 3) if (VictoryCheck(field) != "") { Console.WriteLine("You won! Good job"); return; }
-                        if (chooseLVLBool == 1) KRobot.MakeRobotKiller(field, "O", counter); //TEST
+                        if (chooseLVLBool == 1) KRobot.MakeRobotKiller(field, "O", counter);
                         else MakeRobot(field, "O");
                         if (counter >= 3) if (VictoryCheck(field) != "") { Console.WriteLine("Oops.. You lost"); return; }
                     }
@@ -108,7 +107,6 @@ namespace XO
             }
         }
 
-        //Функция, реализующая ход робота
         public static void MakeRobot(string[] field, string str)
         {
             if (!field.Contains("-")) return;
@@ -132,7 +130,6 @@ namespace XO
             XOgrid = new List<string>();
         }
 
-        //Функция, реализующая ход игрока
         public static void MakePeople(string[] field, string str)
         {
             if (!field.Contains("-")) return;
@@ -158,7 +155,6 @@ namespace XO
             PrintXO(field);
         }
 
-        //Проверка выбора игроком индекса
         public static int ChooseIndex(bool fl)
         {
             int ind = -1;
@@ -172,7 +168,6 @@ namespace XO
             return ind;
         }
 
-        //Вывод поля
         public static void PrintXO(string[] a)
         {
             int c = 1;
@@ -200,8 +195,6 @@ namespace XO
             Console.WriteLine();
         }
 
-
-        //Проверка поля на победу одного из участников
         public static string VictoryCheck(string[] field)
         {
             string backStr = "";
@@ -216,7 +209,6 @@ namespace XO
             return backStr;
         }
 
-        //Ход робота в рандомное место на свободное поле
         public static void PushXO(string[] field)
         {
             Random r = new Random();
