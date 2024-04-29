@@ -8,52 +8,66 @@ namespace XO
 {
     public class XOFunctions
     {
-        public static void FunXO()
+        //Центральная функция игры, которая определяет поле, один или два игрока играют, уровень сложности и т.д.
+        public static void FunXO(int old_chooseBoolMode = -1, int old_chooseLVLBool = 1, int old_chooseBool = -1)
         {
             Random r = new Random();
             int counter = 1;
             string[] field = new string[] { "-", "-", "-", "-", "-", "-", "-", "-", "-" };
 
-            Console.WriteLine("Choose how you will play: Solo or Duo?");
-            string chooseMode = Console.ReadLine();
-            int chooseBoolMode;
+            int chooseBoolMode = old_chooseBoolMode;
 
-            while (chooseMode.ToLower() != "solo" && chooseMode.ToLower() != "duo")
+            if (chooseBoolMode == -1 || chooseBoolMode == -2)
             {
-                Console.WriteLine("It's not Solo or Duo! Try again");
-                chooseMode = Console.ReadLine();
-            }
+                Console.WriteLine("Choose how you will play: Solo(s) or Duo(d)?");
+                string chooseMode = Console.ReadLine();
 
-            if (chooseMode.ToLower() == "solo") { chooseBoolMode = 1; }
-            else chooseBoolMode = 0;
+                while (chooseMode.ToLower() != "solo" && chooseMode.ToLower() != "s" && chooseMode.ToLower() != "duo" && chooseMode.ToLower() != "d")
+                {
+                    Console.WriteLine("It's not Solo(s) or Duo(d)! Try again");
+                    chooseMode = Console.ReadLine();
+                }
+
+                if (chooseMode.ToLower() == "solo" || chooseMode.ToLower() == "s") { chooseBoolMode = 1; XO.chooseBoolMode = 1; }
+                else { chooseBoolMode = 0; XO.chooseBoolMode = 0; }
+            }
 
             if (chooseBoolMode == 1)
             {
-                Console.WriteLine($"Choose Robot-Level: Hard or Lite?");
-                string chooseLVL = Console.ReadLine();
-                int chooseLVLBool;
+                int chooseLVLBool = old_chooseLVLBool;
 
-                while (chooseLVL.ToLower() != "hard" && chooseLVL.ToLower() != "lite")
+                if (chooseLVLBool == -1 || chooseLVLBool == -2)
                 {
-                    Console.WriteLine("It's not Hard or Lite! Try again");
-                    chooseLVL = Console.ReadLine();
+                    Console.WriteLine($"Choose Robot-Level: Hard(h) or Lite(l)?");
+                    string chooseLVL = Console.ReadLine();
+
+                    while (chooseLVL.ToLower() != "hard" && chooseLVL.ToLower() != "h" && chooseLVL.ToLower() != "lite" && chooseLVL.ToLower() != "l")
+                    {
+                        Console.WriteLine("It's not Hard(h) or Lite(l)! Try again");
+                        chooseLVL = Console.ReadLine();
+                    }
+
+                    if (chooseLVL.ToLower() == "hard" || chooseLVL.ToLower() == "h") { chooseLVLBool = 1; XO.chooseLVLBool = 1; }
+                    else { chooseLVLBool = 0; XO.chooseLVLBool = 0; }
                 }
 
-                if (chooseLVL.ToLower() == "hard") { chooseLVLBool = 1; }
-                else chooseLVLBool = 0;
+                int chooseBool = old_chooseBool;
 
-                Console.WriteLine("Choose who are you: X or O?");
-                string choose = Console.ReadLine();
-                int chooseBool;
-
-                while (choose.ToLower() != "x" && choose.ToLower() != "o")
+                if (chooseBool == -1 || chooseBool == -2)
                 {
-                    Console.WriteLine("It's not X or O! Try again");
-                    choose = Console.ReadLine();
-                }
+                    Console.WriteLine("Choose who are you: X or O?");
+                    string choose = Console.ReadLine();
 
-                if (choose.ToLower() == "x") { chooseBool = 1; }
-                else chooseBool = 0;
+
+                    while (choose.ToLower() != "x" && choose.ToLower() != "o")
+                    {
+                        Console.WriteLine("It's not X or O! Try again");
+                        choose = Console.ReadLine();
+                    }
+
+                    if (choose.ToLower() == "x") { chooseBool = 1; XO.chooseBool = 1; }
+                    else { chooseBool = 0; XO.chooseBool = 0; }
+                }
 
                 while (true)
                 {
@@ -61,7 +75,7 @@ namespace XO
 
                     if (chooseBool == 0)
                     {
-                        if (chooseLVLBool == 1) KRobot.MakeRobotKiller(field, "X", counter);
+                        if (chooseLVLBool == 1) KRobot.MakeRobotKiller(field, "X", counter); //TEST
                         else MakeRobot(field, "X");
                         if (counter >= 3) if (VictoryCheck(field) != "") { Console.WriteLine("Oops.. You lost"); return; }
                         MakePeople(field, "O");
@@ -72,7 +86,7 @@ namespace XO
                     {
                         MakePeople(field, "X");
                         if (counter >= 3) if (VictoryCheck(field) != "") { Console.WriteLine("You won! Good job"); return; }
-                        if (chooseLVLBool == 1) KRobot.MakeRobotKiller(field, "O", counter);
+                        if (chooseLVLBool == 1) KRobot.MakeRobotKiller(field, "O", counter); //TEST
                         else MakeRobot(field, "O");
                         if (counter >= 3) if (VictoryCheck(field) != "") { Console.WriteLine("Oops.. You lost"); return; }
                     }
@@ -107,6 +121,7 @@ namespace XO
             }
         }
 
+        //Функция, реализующая ход робота
         public static void MakeRobot(string[] field, string str)
         {
             if (!field.Contains("-")) return;
@@ -130,6 +145,7 @@ namespace XO
             XOgrid = new List<string>();
         }
 
+        //Функция, реализующая ход игрока
         public static void MakePeople(string[] field, string str)
         {
             if (!field.Contains("-")) return;
@@ -155,6 +171,7 @@ namespace XO
             PrintXO(field);
         }
 
+        //Проверка выбора игроком индекса
         public static int ChooseIndex(bool fl)
         {
             int ind = -1;
@@ -168,6 +185,7 @@ namespace XO
             return ind;
         }
 
+        //Вывод поля
         public static void PrintXO(string[] a)
         {
             int c = 1;
@@ -195,6 +213,8 @@ namespace XO
             Console.WriteLine();
         }
 
+
+        //Проверка поля на победу одного из участников
         public static string VictoryCheck(string[] field)
         {
             string backStr = "";
@@ -209,6 +229,7 @@ namespace XO
             return backStr;
         }
 
+        //Ход робота в рандомное место на свободное поле
         public static void PushXO(string[] field)
         {
             Random r = new Random();
